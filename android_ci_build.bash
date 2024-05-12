@@ -11,7 +11,6 @@ cmake_build () {
   # | echo "Build exit code: $?"
   # --verbose
   cd ..
-  cd ./native
   cp build-$ANDROID_ABI/*.so lib/$ANDROID_ABI/
 }
 
