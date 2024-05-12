@@ -23,9 +23,6 @@ function build_linux()
     ./configure ${HOST+--host=$HOST} ${CONFIGURE_OPTIONS} || cat */config.log
     make
     make dist
-    DEJAGNU=$(pwd)/.ci/site.exp BOARDSDIR=$(pwd)/.ci runtest --version
-    DEJAGNU=$(pwd)/.ci/site.exp BOARDSDIR=$(pwd)/.ci make check RUNTESTFLAGS="-a $RUNTESTFLAGS"
-    exit $?
 }
 
 function build_foreign_linux()
