@@ -46,7 +46,7 @@ jobs:
           export RANLIB="${TOOLCHAIN}"/bin/llvm-ranlib
           export STRIP="${TOOLCHAIN}"/bin/llvm-strip
           export LINK="${TOOLCHAIN}"/bin/llvm-link
-          export CPPFLAGS="-I$ANDROID_INCLUDE -I$ANDROID_INCLUDE/${HOST}"
+          export CPPFLAGS="-Wno-error=implicit-function-declaration -I$ANDROID_INCLUDE -I$ANDROID_INCLUDE/${HOST}"
           export LDFLAGS="-L$TOOLCHAIN/sysroot/usr/lib/${HOST}/${ANDROID_API_LEVEL}"
           ./.ci/build.sh
       - uses: actions/upload-artifact@v4
