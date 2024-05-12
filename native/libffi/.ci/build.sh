@@ -21,8 +21,6 @@ function build_linux()
 {
     ./autogen.sh
     ./configure ${HOST+--host=$HOST} ${CONFIGURE_OPTIONS} || cat */config.log
-    make
-    make dist
 }
 
 function build_foreign_linux()
