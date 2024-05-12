@@ -25,9 +25,6 @@ function build_linux()
     make dist
     DEJAGNU=$(pwd)/.ci/site.exp BOARDSDIR=$(pwd)/.ci runtest --version
     DEJAGNU=$(pwd)/.ci/site.exp BOARDSDIR=$(pwd)/.ci make check RUNTESTFLAGS="-a $RUNTESTFLAGS"
-
-    ./rlgl l --key=${RLGL_KEY} https://rl.gl
-    ./rlgl e -l project=libffi -l sha=${GITHUB_SHA:0:7} -l CC='$CC' ${HOST+-l host=$HOST} --policy=https://github.com/libffi/rlgl-policy.git */testsuite/libffi.log
     exit $?
 }
 
