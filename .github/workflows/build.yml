@@ -13,7 +13,7 @@ jobs:
 
   build-android:
     name: Android ${{ matrix.host }}
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
 
     strategy:
       fail-fast: false
@@ -40,7 +40,7 @@ jobs:
           export LD="${TOOLCHAIN}"/bin/ld.lld
           export NM="${TOOLCHAIN}"/bin/llvm-nm
           export AR="${TOOLCHAIN}"/bin/llvm-ar
-          export AS="${CC}"
+          export AS="${TOOLCHAIN}"/bin/llvm-as
           export OBJCOPY="${TOOLCHAIN}"/bin/llvm-objcopy
           export READELF="${TOOLCHAIN}"/bin/llvm-readelf
           export RANLIB="${TOOLCHAIN}"/bin/llvm-ranlib
@@ -49,3 +49,7 @@ jobs:
           export CPPFLAGS="-I$ANDROID_INCLUDE -I$ANDROID_INCLUDE/${HOST}"
           export LDFLAGS="-L$TOOLCHAIN/sysroot/usr/lib/${HOST}/${ANDROID_API_LEVEL}"
           ./.ci/build.sh
+      - uses: actions/upload-artifact@v4
+        with:
+         name: artifact
+         path: native/libffi/*.so
