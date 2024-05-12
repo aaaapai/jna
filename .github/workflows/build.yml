@@ -16,7 +16,7 @@ jobs:
 
   build-android:
     name: Android ${{ matrix.host }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     strategy:
       fail-fast: false
@@ -36,14 +36,14 @@ jobs:
           # https://developer.android.com/ndk/guides/other_build_systems
           # https://android.googlesource.com/platform/ndk/+/master/docs/BuildSystemMaintainers.md
           cd ./native/libffi/
-          export TOOLCHAIN="$ANDROID_NDK_LATEST_HOME"/toolchains/llvm/prebuilt/linux-x86_64
+          export TOOLCHAIN="${ANDROID_NDK_ROOT}"/toolchains/llvm/prebuilt/linux-x86_64
           export ANDROID_INCLUDE=$TOOLCHAIN/sysroot/usr/include
           export CC="${TOOLCHAIN}"/bin/${HOST}${ANDROID_API_LEVEL}-clang
           export CXX="${TOOLCHAIN}"/bin/${HOST}${ANDROID_API_LEVEL}-clang++
           export LD="${TOOLCHAIN}"/bin/ld.lld
           export NM="${TOOLCHAIN}"/bin/llvm-nm
           export AR="${TOOLCHAIN}"/bin/llvm-ar
-          export AS="${TOOLCHAIN}"/bin/llvm-as
+          export AS="${CC}"
           export OBJCOPY="${TOOLCHAIN}"/bin/llvm-objcopy
           export READELF="${TOOLCHAIN}"/bin/llvm-readelf
           export RANLIB="${TOOLCHAIN}"/bin/llvm-ranlib
