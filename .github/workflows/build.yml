@@ -1,0 +1,53 @@
+name: CI
+
+# Controls when the action will run.
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+
+  build-android:
+    name: Android ${{ matrix.host }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        host: [aarch64-linux-android]
+
+    steps:
+      - run: git config --global core.autocrlf input
+      - uses: actions/checkout@v4
+      - run: ./native/libffi/.ci/install.sh
+      - env:
+          HOST: ${{ matrix.HOST }}
+          ANDROID_API_LEVEL: 24
+          CONFIGURE_OPTIONS: "--disable-multi-os-directory" # fixes warning about unsupported -print-multi-os-directory with clang
+        run: |
+          # Relevant documentation:
+          # https://developer.android.com/ndk/guides/other_build_systems
+          # https://android.googlesource.com/platform/ndk/+/master/docs/BuildSystemMaintainers.md
+          export TOOLCHAIN="$ANDROID_NDK_LATEST_HOME"/toolchains/llvm/prebuilt/linux-x86_64
+          export ANDROID_INCLUDE=$TOOLCHAIN/sysroot/usr/include
+          export CC="${TOOLCHAIN}"/bin/${HOST}${ANDROID_API_LEVEL}-clang
+          export CXX="${TOOLCHAIN}"/bin/${HOST}${ANDROID_API_LEVEL}-clang++
+          export LD="${TOOLCHAIN}"/bin/ld.lld
+          export NM="${TOOLCHAIN}"/bin/llvm-nm
+          export AR="${TOOLCHAIN}"/bin/llvm-ar
+          export AS="${TOOLCHAIN}"/bin/llvm-as
+          export OBJCOPY="${TOOLCHAIN}"/bin/llvm-objcopy
+          export READELF="${TOOLCHAIN}"/bin/llvm-readelf
+          export RANLIB="${TOOLCHAIN}"/bin/llvm-ranlib
+          export STRIP="${TOOLCHAIN}"/bin/llvm-strip
+          export LINK="${TOOLCHAIN}"/bin/llvm-link
+          export CPPFLAGS="-I$ANDROID_INCLUDE -I$ANDROID_INCLUDE/${HOST}"
+          export LDFLAGS="-L$TOOLCHAIN/sysroot/usr/lib/${HOST}/${ANDROID_API_LEVEL}"
+          ./native/libffi/.ci/build.sh
