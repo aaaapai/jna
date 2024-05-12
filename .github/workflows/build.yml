@@ -33,7 +33,7 @@ jobs:
           # https://developer.android.com/ndk/guides/other_build_systems
           # https://android.googlesource.com/platform/ndk/+/master/docs/BuildSystemMaintainers.md
           cd ./native/libffi/
-          export TOOLCHAIN="${ANDROID_NDK_ROOT}"/toolchains/llvm/prebuilt/linux-x86_64
+          export TOOLCHAIN="${ANDROID_NDK_LATEST_HOME}"/toolchains/llvm/prebuilt/linux-x86_64
           export ANDROID_INCLUDE=$TOOLCHAIN/sysroot/usr/include
           export CC="${TOOLCHAIN}"/bin/${HOST}${ANDROID_API_LEVEL}-clang
           export CXX="${TOOLCHAIN}"/bin/${HOST}${ANDROID_API_LEVEL}-clang++
