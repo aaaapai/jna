@@ -1,4 +1,5 @@
 #!/bin/bash
+cd ./native/libffi/
 set -x
 
 if [[ $RUNNER_OS != 'Linux' ]]; then
