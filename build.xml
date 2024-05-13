@@ -421,7 +421,10 @@ osname=macosx;processor=x86,
 com/sun/jna/darwin-x86-64/libjnidispatch.jnilib;
 osname=macosx;processor=x86-64,
 com/sun/jna/darwin-aarch64/libjnidispatch.jnilib;
-osname=macosx;processor=aarch64
+osname=macosx;processor=aarch64,
+
+com/sun/jna/android-aarch64/libjnidispatch.so;
+processor=aarch64;osname=android,
 "/>
           </manifest>
           <manifest file="@{target}" mode="update" if:true="@{module-info}">
