@@ -29,27 +29,8 @@ jobs:
           ANDROID_API_LEVEL: 24
           CONFIGURE_OPTIONS: "--disable-multi-os-directory" # fixes warning about unsupported -print-multi-os-directory with clang
         run: |
-          # Relevant documentation:
-          # https://developer.android.com/ndk/guides/other_build_systems
-          # https://android.googlesource.com/platform/ndk/+/master/docs/BuildSystemMaintainers.md
-          cd ./native/libffi/
-          export TOOLCHAIN="${ANDROID_NDK_LATEST_HOME}"/toolchains/llvm/prebuilt/linux-x86_64
-          export ANDROID_INCLUDE=$TOOLCHAIN/sysroot/usr/include
-          export CC="${TOOLCHAIN}"/bin/${HOST}${ANDROID_API_LEVEL}-clang
-          export CXX="${TOOLCHAIN}"/bin/${HOST}${ANDROID_API_LEVEL}-clang++
-          export LD="${TOOLCHAIN}"/bin/ld.lld
-          export NM="${TOOLCHAIN}"/bin/llvm-nm
-          export AR="${TOOLCHAIN}"/bin/llvm-ar
-          export AS="${TOOLCHAIN}"/bin/llvm-as
-          export OBJCOPY="${TOOLCHAIN}"/bin/llvm-objcopy
-          export READELF="${TOOLCHAIN}"/bin/llvm-readelf
-          export RANLIB="${TOOLCHAIN}"/bin/llvm-ranlib
-          export STRIP="${TOOLCHAIN}"/bin/llvm-strip
-          export LINK="${TOOLCHAIN}"/bin/llvm-link
-          export CPPFLAGS="-Wno-error=implicit-function-declaration -I$ANDROID_INCLUDE -I$ANDROID_INCLUDE/${HOST}"
-          export LDFLAGS="-L$TOOLCHAIN/sysroot/usr/lib/${HOST}/${ANDROID_API_LEVEL}"
-          ./.ci/build.sh
+          ./android_ci_build.bash
       - uses: actions/upload-artifact@v4
         with:
          name: artifact
-         path: native/*.so
+         path: libs
