@@ -33,7 +33,7 @@ jobs:
         run: sudo apt-get -y install texinfo
       - name: Build with Ant
         run: |
-          ANT_OPTS="-D-Dos.prefix=aarch64-linux-android- -Dos.arch=aarch64 -Dos.name=android"
+          ANT_OPTS="-D-Dos.prefix=aarch64-android -Dos.arch=aarch64 -Dos.name=android"
           export ANT_OPTS
           ant test
           ant test-platform
