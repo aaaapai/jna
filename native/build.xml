@@ -11,6 +11,9 @@
     <condition property="os.prefix" value="linux-${jre.arch}">
         <os name="Linux"/>
     </condition>
+    <condition property="os.prefix" value="android-${jre.arch}">
+        <os name="android"/>
+    </condition>
     <condition property="os.prefix" value="aix-${jre.arch}">
         <os name="AIX"/>
     </condition>
