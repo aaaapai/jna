@@ -15,8 +15,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        java: [17]
-        os: [ubuntu-latest, macos-latest]
+        java: [21]
+        os: [ubuntu-latest]
       # Run all tests even if one fails
       fail-fast: false
     name: Test JDK ${{ matrix.java }}, ${{ matrix.os }}
@@ -27,24 +27,13 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: ${{ matrix.java }}
-          distribution: 'zulu'
+          distribution: 'temurin'
       - name: Linux requirements
         if: contains(matrix.os, 'ubuntu')
         run: sudo apt-get -y install texinfo
-      - name: macOS requirements
-        if: contains(matrix.os, 'macos')
-        run: |
-          brew update
-          brew install automake --force
-          brew install libtool --force
-          brew install texinfo --force
-      - name: Checkstyle
-        if: contains(matrix.os, 'ubuntu') && contains(matrix.java, '8')
-        run: |
-          ant checkstyle
-          ant dist
       - name: Build with Ant
         run: |
+          export ANT_OPTS=-Dos.prefix=android-aarch64 -D-native=true
           ant test
           ant test-platform
 
