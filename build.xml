@@ -588,7 +588,7 @@ osname=macosx;processor=aarch64
     android:versionCode="]]>${android.versionCode}<![CDATA["
     android:versionName="]]>${jna.version}<![CDATA[" >
 
-    <uses-sdk android:targetSdkVersion="25" />
+    <uses-sdk android:targetSdkVersion="24" />
 </manifest> 
     ]]></echo>
     <zip zipfile="${build}/${aar}">
