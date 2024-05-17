@@ -100,13 +100,10 @@ CDEFINES=-D_REENTRANT
 PCFLAGS=-W -Wall -Wno-unused -Wno-parentheses
 CFLAGS=$(PCFLAGS) $(CFLAGS_EXTRA) $(COPT) $(CDEBUG) $(CDEFINES) $(CINCLUDES) \
        -DJNA_JNI_VERSION='"$(JNA_JNI_VERSION)"' -DCHECKSUM='"$(CHECKSUM)"'
-LDFLAGS=-o $@ -shared
+LDFLAGS=-o $@
 ifeq ($(DYNAMIC_LIBFFI),true)
 CFLAGS += $(shell pkg-config --cflags libffi 2>/dev/null || echo)
 LIBS += $(shell pkg-config --libs libffi 2>/dev/null || echo -lffi)
-else
-# -static-libgcc avoids gcc library incompatibilities across linux systems
-LDFLAGS += -static-libgcc
 endif
 # Avoid bug in X11-based 1.5/1.6 VMs; dynamically load instead of linking
 # See http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6539705
@@ -189,9 +186,10 @@ CDEFINES=-DFFI_STATIC_BUILD -DNO_JAWT -DNO_WEAK_GLOBALS -DFFI_MMAP_EXEC_WRIT=1 -
 COPT+=-fpic -ffunction-sections -funwind-tables -fno-short-enums -Wno-error=implicit-function-declaration
 JAVA_INCLUDES=
 CINCLUDES+=-I"$(TOOLCHAIN)/sysroot/usr/include" # -I/usr/include
-LIBS=-L"$(TOOLCHAIN)/sysroot/usr/lib/$(HOST)/24" -ldl
+LIBS=-L"$(TOOLCHAIN)/sysroot/usr/lib/$(HOST)/24" -lc -ldl -lm
 FFI_ENV=CPP="$(thecc)" thecc="$(thecc)" CC="$(CC)" CFLAGS="$(COPT) $(CDEBUG) $(CINCLUDES)" CPPFLAGS="$(CDEFINES) $(CINCLUDES)" LIBS="$(LIBS)" RANLIB="$(RANLIB)" LINK="$(LINK)" AR="$(AR)" AS="$(AS)" NM="$(NM)" STRIP="$(STRIP)" READELF="$(READELF)" OBJCOPY="$(OBJCOPY)" CXX="$(thecxx)"
 FFI_CONFIG=--enable-static --disable-shared --with-pic=yes --host=$(HOST)
+LDFLAGS += -arch $(AARCH)
 endif
 
 # W32CE build requires cegcc cross-compiler and phoneME JavaME implementation
