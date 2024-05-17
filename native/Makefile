@@ -175,7 +175,7 @@ CC=$(thecc)
 CXX=$(thecxx)
 AR=$(TOOLCHAIN)/bin/llvm-ar
 AS=$(TOOLCHAIN)/bin/llvm-as
-LD=$(TOOLCHAIN)/bin/ld
+LD=$(TOOLCHAIN)/bin/ld.lld
 OBJCOPY=$(TOOLCHAIN)/bin/llvm-objcopy
 READELF=$(TOOLCHAIN)/bin/llvm-readelf
 RANLIB=$(TOOLCHAIN)/bin/llvm-ranlib
@@ -185,10 +185,10 @@ LINK=$(TOOLCHAIN)/bin/llvm-link
 CDEFINES=-DFFI_STATIC_BUILD -DNO_JAWT -DNO_WEAK_GLOBALS -DFFI_MMAP_EXEC_WRIT=1 -DFFI_MMAP_EXEC_SELINUX=0
 COPT+=-fpic -ffunction-sections -funwind-tables -fno-short-enums -Wno-error=implicit-function-declaration
 JAVA_INCLUDES=
-CINCLUDES+=-I"$(TOOLCHAIN)/sysroot/usr/include" -I"$(TOOLCHAIN)/sysroot/usr/include/$(HOST)" # -I/usr/include
+CINCLUDES+=-I"$(TOOLCHAIN)/sysroot/usr/include" -I"$(TOOLCHAIN)/sysroot/usr/include/$(HOST)/asm" # -I/usr/include
 LIBS=-L"$(TOOLCHAIN)/sysroot/usr/lib/$(HOST)/24" -lc -ldl -lm
 FFI_ENV=CPP="$(thecc)" thecc="$(thecc)" CC="$(CC)" CFLAGS="$(COPT) $(CDEBUG) $(CINCLUDES)" CPPFLAGS="$(CDEFINES) $(CINCLUDES)" LIBS="$(LIBS)" RANLIB="$(RANLIB)" LINK="$(LINK)" AR="$(AR)" AS="$(AS)" NM="$(NM)" STRIP="$(STRIP)" READELF="$(READELF)" OBJCOPY="$(OBJCOPY)" CXX="$(thecxx)"
-FFI_CONFIG=--enable-static --disable-shared --with-pic=yes --host=$(HOST)
+FFI_CONFIG=--enable-static --with-pic=yes --host=$(HOST)
 endif
 
 # W32CE build requires cegcc cross-compiler and phoneME JavaME implementation
