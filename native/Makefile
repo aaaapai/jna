@@ -188,9 +188,10 @@ LINK=$(TOOLCHAIN)/bin/llvm-link
 CDEFINES=-DFFI_STATIC_BUILD -DNO_JAWT -DNO_WEAK_GLOBALS -DFFI_MMAP_EXEC_WRIT=1 -DFFI_MMAP_EXEC_SELINUX=0
 COPT+=-fpic -ffunction-sections -funwind-tables -fno-short-enums
 JAVA_INCLUDES=
-CINCLUDES+=-I"$(TOOLCHAIN)/sysroot/usr/include -Wno-error=implicit-function-declaration" # -I/usr/include
+CINCLUDES+=-I"$(TOOLCHAIN)/sysroot/usr/include" # -I/usr/include
 LIBS=-nostdlib -L"$(TOOLCHAIN)/sysroot/usr/lib/$(HOST)/24" -lc -ldl -lm
 LDFLAGS+=-Wl,-shared,-Bsymbolic
+CPPFLAGS+=-Wno-error=implicit-function-declaration
 FFI_ENV=CPP="$(thecc)" thecc="$(thecc)" CC="$(CC)" CFLAGS="$(COPT) $(CDEBUG) $(CINCLUDES)" CPPFLAGS="$(CDEFINES) $(CINCLUDES)" LIBS="$(LIBS)" RANLIB="$(RANLIB)" LINK="$(LINK)" AR="$(AR)" AS="$(AS)" NM="$(NM)" STRIP="$(STRIP)" READELF="$(READELF)" OBJCOPY="$(OBJCOPY)"
 FFI_CONFIG=--enable-static --disable-shared --with-pic=yes --host=$(HOST)
 endif
