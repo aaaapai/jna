@@ -117,8 +117,9 @@ STRIP=strip -x
 # Android build (cross-compile) requires the android NDK.
 # Ensure the following tools are in your path and adjust NDK_PLATFORM as needed
 ifeq ($(OS),android)
+
 AARCH=$(ARCH)
-ALIBDIR=/usr/lib
+
 ifeq ($(ARCH),arm)
 PREFIX=arm-linux-androideabi-
 COPT+= -mthumb-interwork -march=armv5te -mtune=xscale -msoft-float -fstack-protector 
@@ -134,7 +135,7 @@ ifeq ($(ARCH),aarch64)
 PREFIX=aarch64-linux-android-
 HOST=aarch64-linux-android
 AARCH=arm64
-ALIBDIR=/usr/lib64
+
 else
 ifeq ($(ARCH),x86)
 PREFIX=i686-linux-android-
@@ -146,7 +147,7 @@ PREFIX=x86_64-linux-android-
 COPT+= -m64
 HOST=x86_64-linux-android
 AARCH=x86_64
-ALIBDIR=/usr/lib64
+
 else
 ifeq ($(ARCH),mips)
 PREFIX=mipsel-linux-android-
@@ -157,7 +158,7 @@ ifeq ($(ARCH),mips64)
 PREFIX=mips64el-linux-android-
 HOST=mips64el-linux-android
 COPT+=
-ALIBDIR=/usr/lib64
+
 else
 ERROR = $(error "Unsupported android architecture '$(ARCH)'")
 endif
@@ -167,21 +168,30 @@ endif
 endif
 endif
 endif
-NDK?=/Developer/Applications/android-ndk-r10e
-NDK_PLATFORM?=$(NDK)/platforms/android-21
-SYSROOT=$(NDK_PLATFORM)/arch-$(AARCH)
-CC=$(PREFIX)gcc --sysroot $(SYSROOT)
-CPP=$(PREFIX)cpp
-LD=$(CC)
-RANLIB=$(PREFIX)ranlib
-STRIP=$(PREFIX)strip -x
+
+TOOLCHAIN=$(ANDROID_NDK_LATEST_HOME)/toolchains/llvm/prebuilt/linux-x86_64
+
+thecc=$(TOOLCHAIN)/bin/$(HOST)24-clang
+thecxx=$(TOOLCHAIN)/bin/$(HOST)24-clang++
+NM=$(TOOLCHAIN)/bin/llvm-nm
+CC=$(thecc)
+CXX=$(thecxx)
+AR=$(TOOLCHAIN)/bin/llvm-ar
+AS=$(TOOLCHAIN)/bin/llvm-as
+LD=$(TOOLCHAIN)/bin/ld64.lld
+OBJCOPY=$(TOOLCHAIN)/bin/llvm-objcopy
+READELF=$(TOOLCHAIN)/bin/llvm-readelf
+RANLIB=$(TOOLCHAIN)/bin/llvm-ranlib
+STRIP=$(TOOLCHAIN)/bin/llvm-strip
+LINK=$(TOOLCHAIN)/bin/llvm-link
+
 CDEFINES=-DFFI_STATIC_BUILD -DNO_JAWT -DNO_WEAK_GLOBALS -DFFI_MMAP_EXEC_WRIT=1 -DFFI_MMAP_EXEC_SELINUX=0
 COPT+=-fpic -ffunction-sections -funwind-tables -fno-short-enums
 JAVA_INCLUDES=
-CINCLUDES+=-I"$(NDK_PLATFORM)/arch-$(AARCH)/usr/include" # -I/usr/include
-LIBS=-nostdlib -L"$(NDK_PLATFORM)/arch-$(AARCH)$(ALIBDIR)/" -lgcc -lc -ldl -lm
+CINCLUDES+=-I"$(TOOLCHAIN)/sysroot/usr/include" # -I/usr/include
+LIBS=-nostdlib -L"$(TOOLCHAIN)/sysroot/usr/lib/$(HOST)/24" -lc -ldl -lm
 LDFLAGS+=-Wl,-shared,-Bsymbolic
-FFI_ENV=CPP="$(CPP)" CC="$(CC)" CFLAGS="$(COPT) $(CDEBUG) $(CINCLUDES)" CPPFLAGS="$(CDEFINES) $(CINCLUDES)" LIBS="$(LIBS)" RANLIB="$(RANLIB)"
+FFI_ENV=CPP="$(thecc)" thecc="$(thecc)" CC="$(CC)" CFLAGS="$(COPT) $(CDEBUG) $(CINCLUDES)" CPPFLAGS="$(CDEFINES) $(CINCLUDES)" LIBS="$(LIBS)" RANLIB="$(RANLIB)" LINK="$(LINK)" AR="$(AR)" AS="$(AS)" NM="$(NM)" STRIP="$(STRIP)" READELF="$(READELF)" OBJCOPY="$(OBJCOPY)"
 FFI_CONFIG=--enable-static --disable-shared --with-pic=yes --host=$(HOST)
 endif
 
@@ -205,7 +215,7 @@ HOST_CONFIG=--host=arm-mingw32ce
 # libffi must use GNU ld; jnidispatch.dll requires gcc
 FFI_ENV+=LD=arm-mingw32ce-ld CPP=cpp CFLAGS="$(CDEFINES)"
 PHONEME=../phoneme/cdc/src
-JAVA_INCLUDES=-I$(PHONEME)/share/javavm/export -I$(PHONEME)/share -I$(PHONEME)/win32 -I$(PHONEME)/win32-arm
+JAVA_INCLUDES=-I$(PHONEME)/share/javavm/-I$(PHONEME)/share -I$(PHONEME)/win32 -I$(PHONEME)/win32-arm
 TESTLIB_TRUNC=$(BUILD)/testlib-truncated.dll
 endif
 
