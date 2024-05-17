@@ -178,7 +178,7 @@ CC=$(thecc)
 CXX=$(thecxx)
 AR=$(TOOLCHAIN)/bin/llvm-ar
 AS=$(TOOLCHAIN)/bin/llvm-as
-LD=$(TOOLCHAIN)/bin/ld64.lld
+LD=$(TOOLCHAIN)/bin/ld
 OBJCOPY=$(TOOLCHAIN)/bin/llvm-objcopy
 READELF=$(TOOLCHAIN)/bin/llvm-readelf
 RANLIB=$(TOOLCHAIN)/bin/llvm-ranlib
@@ -191,7 +191,7 @@ JAVA_INCLUDES=
 CINCLUDES+=-I"$(TOOLCHAIN)/sysroot/usr/include" # -I/usr/include
 LIBS=-nostdlib -L"$(TOOLCHAIN)/sysroot/usr/lib/$(HOST)/24" -lc -ldl -lm
 LDFLAGS+=-Wl,-shared,-Bsymbolic
-FFI_ENV=CPP="$(thecc)" thecc="$(thecc)" CC="$(CC)" CFLAGS="$(COPT) $(CDEBUG) $(CINCLUDES)" CPPFLAGS="$(CDEFINES) $(CINCLUDES)" LIBS="$(LIBS)" RANLIB="$(RANLIB)" LINK="$(LINK)" AR="$(AR)" AS="$(AS)" NM="$(NM)" STRIP="$(STRIP)" READELF="$(READELF)" OBJCOPY="$(OBJCOPY)"
+FFI_ENV=CPP="$(thecc)" thecc="$(thecc)" CC="$(CC)" CFLAGS="$(COPT) $(CDEBUG) $(CINCLUDES)" CPPFLAGS="$(CDEFINES) $(CINCLUDES)" LIBS="$(LIBS)" RANLIB="$(RANLIB)" LINK="$(LINK)" AR="$(AR)" AS="$(AS)" NM="$(NM)" STRIP="$(STRIP)" READELF="$(READELF)" OBJCOPY="$(OBJCOPY)" CXX="$(thecxx)"
 FFI_CONFIG=--enable-static --disable-shared --with-pic=yes --host=$(HOST)
 endif
 
