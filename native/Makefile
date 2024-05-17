@@ -191,7 +191,7 @@ JAVA_INCLUDES=
 CINCLUDES+=-I"$(TOOLCHAIN)/sysroot/usr/include" # -I/usr/include
 LIBS=-L"$(TOOLCHAIN)/sysroot/usr/lib/$(HOST)/24" -lc -ldl -lm
 FFI_ENV=CPP="$(thecc)" thecc="$(thecc)" CC="$(CC)" CFLAGS="$(COPT) $(CDEBUG) $(CINCLUDES)" CPPFLAGS="$(CDEFINES) $(CINCLUDES)" LIBS="$(LIBS)" RANLIB="$(RANLIB)" LINK="$(LINK)" AR="$(AR)" AS="$(AS)" NM="$(NM)" STRIP="$(STRIP)" READELF="$(READELF)" OBJCOPY="$(OBJCOPY)" CXX="$(thecxx)"
-FFI_CONFIG=--with-pic=yes --host=$(HOST) -arch=$(AARCH)
+FFI_CONFIG=--with-pic=yes --host=$(HOST)
 endif
 
 # W32CE build requires cegcc cross-compiler and phoneME JavaME implementation
