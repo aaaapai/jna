@@ -166,7 +166,7 @@ endif
 endif
 endif
 
-TOOLCHAIN=$(ANDROID_NDK_LATEST_HOME)/toolchains/llvm/prebuilt/linux-x86_64
+TOOLCHAIN=$(ANDROID_NDK_HOME)/toolchains/llvm/prebuilt/linux-x86_64
 
 thecc=$(TOOLCHAIN)/bin/$(HOST)24-clang
 thecxx=$(TOOLCHAIN)/bin/$(HOST)24-clang++
